@@ -1,5 +1,11 @@
 # quiz-ui
 
+## Project bootstrap
+```
+npm install -g @vue/cli
+vue create quiz-ui
+```
+
 ## Project setup
 ```
 npm install
