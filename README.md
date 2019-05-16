@@ -4,6 +4,8 @@
 ```
 npm install -g @vue/cli
 vue create quiz-ui
+cd quiz-ui
+npm install axios --save
 ```
 
 ## Project setup
