@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <h1>Quiz</h1>
-    <img v-if="cat_url" :src="cat_url" width="500" alt="" @click="cat_url = ''">
+    <h1>Wähle dein Quiz</h1>
+
+    <ul>
+      <li v-for="quiz of quizzes" :key="quiz.name" @click="startQuiz(quiz.id)">{{quiz.name}}</li>
+    </ul>
+
+    <!-- <img v-if="cat_url" :src="cat_url" width="500" alt="" @click="cat_url = ''">
     <div v-else v-for="(frage, index) of fragen" :key="index">
       {{frage.frage}}
       <ul>
         <li v-for="(antwort, index) of frage.antworten" :key="index" @click="check(antwort)">{{antwort.antwort}}</li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -31,8 +36,9 @@ export default {
             {antwort: '120', correct: false},
             {antwort: 'Beliebig', correct: false},
           ]
-        }
-      ]
+        },
+      ],
+      quizzes: []
     }
   },
   methods: {
@@ -44,8 +50,31 @@ export default {
       } else {
         alert('Falsch!')
       }
+    },
+    async startQuiz(quizId) {
+      console.log("Starte das Quiz mit ID", quizId)
+      let response = await axios.get(`/api/quiz/${quizId}/questions`)
+      console.log(response.data)
     }
   },
+  computed: {
+    anzahl_fragen_string() {
+      let anzahl_fragen = this.fragen.length
+      if (anzahl_fragen === 0) {
+        return 'ohne Fragen'
+      } else if (anzahl_fragen === 1) {
+        return 'mit einer Frage'
+      } else {
+        return `mit ${anzahl_fragen} Fragen`
+      }
+      return this.fragen.length
+    }
+  },
+  async created() {
+    let response = await axios.get('/api/quiz')
+    console.log("Daten vom API", response.data)
+    this.quizzes = response.data
+  }
 }
 </script>
 
